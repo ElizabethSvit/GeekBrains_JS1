@@ -37,7 +37,7 @@ function add(a, b) {
     return a + b;
 }
 
-function substract(a, b) {
+function subtract(a, b) {
     return a - b;
 }
 
@@ -47,6 +47,22 @@ function divide(a, b) {
 
 function mul(a, b) {
     return a * b;
+}
+
+// task 5
+function mathOperation(arg1, arg2, operation) {
+    switch (operation) {
+        case 'add':
+            return add(a, b);
+        case 'subtract':
+            return subtract(a, b);
+        case 'divide':
+            return divide(a, b);
+        case 'mul':
+            return mul(a, b);
+        default:
+            return 0;
+    }
 }
 
 
