@@ -32,4 +32,22 @@ if (a >= 0 && b >= 0) console.log(a - b);
 else if (a < 0 && b < 0) console.log(a * b);
 else console.log(a + b);
 
+// task 4
+function add(a, b) {
+    return a + b;
+}
+
+function substract(a, b) {
+    return a - b;
+}
+
+function divide(a, b) {
+    return a / b;
+}
+
+function mul(a, b) {
+    return a * b;
+}
+
+
 
