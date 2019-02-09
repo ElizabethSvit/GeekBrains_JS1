@@ -23,3 +23,13 @@
 var a = 2;
 var x = 1 + (a *= 2);
 // x = 5, так как из-за скобок вначале а становится равно 4, затем 1 прибавляется к полученному значению.
+
+// task 3
+var a = 1;
+var b = 2;
+
+if (a >= 0 && b >= 0) console.log(a - b);
+else if (a < 0 && b < 0) console.log(a * b);
+else console.log(a + b);
+
+
