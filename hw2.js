@@ -73,4 +73,27 @@ function power(val, pow) {
 
 console.log(power(2, 5));
 
+// task 7
 
+function checkLength(path) {
+    return path.length >= 3 && path.length <= 12;
+}
+
+function checkSymbols(path) {
+    return path.indexOf('&') !== -1 || path.indexOf('$') !== -1 || path.indexOf('%') !== -1 || path.indexOf('*') !== -1;
+}
+
+function checkStartEnd(path) {
+    return path.lastIndexOf('q', 0) === 0 || path.lastIndexOf('z') === path.length - 1;
+}
+
+function checkPassword(path) {
+    if (checkLength(path) && checkSymbols(path) && checkStartEnd(path)) {
+        return 'Корректный пароль';
+    } else {
+        return 'Некорректный пароль';
+    }
+}
+
+console.log(checkPassword('zzzzzz&z'));
+console.log(checkPassword('!!'));
