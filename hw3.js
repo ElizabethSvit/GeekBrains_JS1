@@ -6,5 +6,16 @@ let a = [
 let b = a;
 console.log(b);
 
+// task 2
+let goods = [{product: 'strawberry', cost: 5}, {product: 'blueberry', cost: 6}];
 
+function countBasketPrice(goods) {
+    let totalPrice = 0;
+    for (var i = 0; i < goods.length; i++) {
+        totalPrice += goods[i].cost;
+    }
+    return totalPrice;
+}
+
+console.log(countBasketPrice(goods));
 
