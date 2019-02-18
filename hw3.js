@@ -22,3 +22,9 @@ console.log(countBasketPrice(goods));
 // task 3
 for (var i = 0; i < 10; console.log(i++));
 
+// task 4
+let star = '*';
+for (var i = 0; i < 20; i++) {
+    console.log(star);
+    star += '*';
+}
