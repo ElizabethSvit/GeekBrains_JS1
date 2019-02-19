@@ -26,22 +26,22 @@ let Basket = {
     goodList : [],
     countTotalPrice: function() {
         var totalPrice = 0;
-        for (var good in this.goodList) {
-            totalPrice += good.price;
+        for (var i = 0; i < this.goodList.length; i++) {
+            totalPrice += this.goodList[i].price;
         }
         return totalPrice;
     },
     countTotalNumber: function() {
         return this.goodList.length;
+    },
+    putToBasket: function(good) {
+        this.goodList.push(good);
     }
 };
 
 let Good = {
     name : 'blueberry',
-    price: 6,
-    putToBasket: function() {
-        Basket.goodList.push(this);
-    }
+    price: 6
 };
 
 var good1 = {};
@@ -63,10 +63,10 @@ var goods = [good1, good2, good3];
 
 for (var i = 0; i < goods.length; i++) {
     if (i % 2 === 0) {
-        goods[i].putToBasket();
+        Basket.putToBasket(goods[i]);
     } else {
-        goods[i].putToBasket();
-        goods[i].putToBasket();
+        Basket.putToBasket(goods[i]);
+        Basket.putToBasket(goods[i]);
     }
 }
 
