@@ -5,12 +5,12 @@
 Если число превышает 999, необходимо выдать соответствующее сообщение с помощью console.log и вернуть пустой объект.
  */
 
-let numToObject = function(num) {
+let numToObject = function (num) {
     if (num > 999) {
         console.log('The number is bigger than 999');
         return {};
     }
-  return {units: num % 10, decades: parseInt(num / 10) % 10, hundreds: parseInt(num / 100) % 10};
+    return {units: num % 10, decades: parseInt(num / 10) % 10, hundreds: parseInt(num / 100) % 10};
 };
 
 console.log(numToObject(245));
@@ -28,22 +28,22 @@ console.log(numToObject(1000));
 
 let Basket = {
     goodList: [],
-    countTotalPrice: function() {
+    countTotalPrice: function () {
         let sumPrice = 0;
         this.goodList.forEach(good => {
             sumPrice += good.price;
         });
         return sumPrice;
     },
-    countTotalNumber: function() {
+    countTotalNumber: function () {
         return this.goodList.length;
     },
-    putToBasket: function(good) {
+    putToBasket: function (good) {
         this.goodList.push(good);
     }
 };
 
-function Good (name, price) {
+function Good(name, price) {
     this.name = name;
     this.price = price;
 }
@@ -65,8 +65,3 @@ for (let i = 0; i < goods.length; i++) {
 
 console.log(Basket.countTotalNumber());
 console.log(Basket.countTotalPrice());
-
-
-
-
-
