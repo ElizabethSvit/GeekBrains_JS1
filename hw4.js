@@ -43,9 +43,11 @@ let Basket = {
     }
 };
 
-function Good(name, price) {
-    this.name = name;
-    this.price = price;
+class Good {
+    constructor(name, price) {
+        this.name = name;
+        this.price = price;
+    }
 }
 
 let good1 = new Good('blueberry', 6);
