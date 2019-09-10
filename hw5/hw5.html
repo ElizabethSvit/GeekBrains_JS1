@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<script>
+
+    /*
+     1. Создать функцию, генерирующую шахматную доску. Можно использовать любые html-теги.
+        Доска должна быть верно разлинована на черные и белые ячейки. Строки должны нумероваться числами от 1 до 8,
+        столбцы — латинскими буквами A, B, C, D, E, F, G, H.
+    */
+
+    let generateTable = function() {
+        let board = '';
+        let rowsNum = 9;
+        let columnsNum = 9;
+
+        let asciiCode = 65;
+        board += '<tr><td></td>';
+        for (let x = 1; x < columnsNum; x++) {
+            board += '<td>' + String.fromCharCode(asciiCode) + '</td>';
+            asciiCode++;
+        }
+        board += '</tr>';
+
+        let i = 0;
+        for (let y = 1; y < rowsNum; y++) {
+            board += '<tr>';
+            board += '<td>' + y.toString() + '</td>';
+            for (let x = 1; x < columnsNum; x++) {
+                if (x % 2 === i) {
+                    board += '<td style="background-color: black" data-x="' + x + '" data-y="' + y + '"></td>';
+                } else {
+                    board += '<td data-x="' + x + '" data-y="' + y + '"></td>';
+                }
+            }
+            i = 1 - i % 2;
+        }
+        return '<table><tbody>' + board + '</tbody></table>';
+    };
+
+    let table = generateTable();
+    document.body.insertAdjacentHTML('afterbegin', table);
+
+
+    /*
+    2. Сделать генерацию корзины динамической: верстка корзины не должна находиться в HTML-структуре.
+    Там должен быть только div, в который будет вставляться корзина, сгенерированная на базе JS:
+        a. Пустая корзина должна выводить строку «Корзина пуста»;
+        b. Наполненная должна выводить «В корзине: n товаров на сумму m рублей».
+    */
+
+    let Basket = {
+        goodList: [],
+        countTotalPrice: function () {
+            let sumPrice = 0;
+            this.goodList.forEach(good => {
+                sumPrice += good.price;
+            });
+            return sumPrice;
+        },
+        countTotalNumber: function () {
+            return this.goodList.length;
+        },
+        putToBasket: function (good) {
+            this.goodList.push(good);
+        }
+    };
+
+    class Good {
+        constructor(name, price) {
+            this.name = name;
+            this.price = price;
+        }
+    }
+
+    let good1 = new Good('blueberry', 6);
+    let good2 = new Good('strawberry', 5);
+    let good3 = new Good('cranberry', 4);
+
+    let goods = [good1, good2, good3];
+
+    for (let i = 0; i < goods.length; i++) {
+        if (i % 2 === 0) {
+            Basket.putToBasket(goods[i]);
+        } else {
+            Basket.putToBasket(goods[i]);
+            Basket.putToBasket(goods[i]);
+        }
+    }
+
+    let smartBasket = function() {
+        let basketStatus = '';
+        if (Basket.countTotalNumber() === 0) {
+            basketStatus = '<p>Корзина пуста</p>';
+        } else {
+            let goods = Basket.countTotalNumber();
+            if (goods === 1)
+                basketStatus = '<p>В корзине 1 товар ';
+            else if (goods > 1 && goods < 5)
+                basketStatus = `<p>В корзине ${goods} товара `;
+            else
+                basketStatus = `<p>В корзине ${goods} товаров `;
+            basketStatus += `на сумму ${Basket.countTotalPrice()} рублей</p>`;
+        }
+        document.body.insertAdjacentHTML('afterend', basketStatus);
+    };
+
+    smartBasket();
+
+</script>
+
+</body>
+</html>
