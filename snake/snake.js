@@ -1,9 +1,41 @@
 'use strict';
 
+let settings = {
+    rowsCount: 21,
+    colsCount: 21,
+    speed: 2,
+    winLength: 5,
+
+    validate() {
+        if (this.rowsCount < 10 || this.rowsCount > 30) {
+            console.error('Неверные настройки, значение rowsCount должно быть в диапазоне [10, 30].');
+            return false;
+        }
+
+        if (this.colsCount < 10 || this.colsCount > 30) {
+            console.error('Неверные настройки, значение rowsCount должно быть в диапазоне [10, 30].');
+            return false;
+        }
+
+        if (this.speed < 1 || this.speed > 10) {
+            console.error('Неверные настройки, значение speed должно быть в диапазоне [1, 10].');
+            return false;
+        }
+
+        if (this.winLength < 5 || this.winLength > 50) {
+            console.error('Неверные настройки, значение winLength должно быть в диапазоне [5, 50].');
+            return false;
+        }
+
+        return true;
+    },
+};
+
 let snake = {
     body: null,
     direction: null,
     lastStepDirection: null,
+    settings,
 
     init(startPoint, direction) {
         this.body = [startPoint];
@@ -29,13 +61,13 @@ let snake = {
 
         switch (this.direction) {
             case 'up':
-                return {x: firstPoint.x, y: firstPoint.y - 1};
+                return {x: firstPoint.x, y: firstPoint.y !== 0 ? firstPoint.y - 1 : settings.rowsCount - 1};
             case 'down':
-                return {x: firstPoint.x, y: firstPoint.y + 1};
+                return {x: firstPoint.x, y: firstPoint.y !== settings.rowsCount - 1 ? firstPoint.y + 1 : 0};
             case 'right':
-                return {x: firstPoint.x + 1, y: firstPoint.y};
+                return {x: firstPoint.x !== settings.colsCount - 1 ? firstPoint.x + 1 : 0, y: firstPoint.y};
             case 'left' :
-                return {x: firstPoint.x - 1, y: firstPoint.y};
+                return {x: firstPoint.x !== 0 ? firstPoint.x - 1 : settings.colsCount - 1, y: firstPoint.y};
         }
     },
 
@@ -134,37 +166,6 @@ let status = {
     isStopped() {
         return this.condition === 'stopped';
     }
-};
-
-let settings = {
-    rowsCount: 21,
-    colsCount: 21,
-    speed: 2,
-    winLength: 5,
-
-    validate() {
-        if (this.rowsCount < 10 || this.rowsCount > 30) {
-            console.error('Неверные настройки, значение rowsCount должно быть в диапазоне [10, 30].');
-            return false;
-        }
-
-        if (this.colsCount < 10 || this.colsCount > 30) {
-            console.error('Неверные настройки, значение rowsCount должно быть в диапазоне [10, 30].');
-            return false;
-        }
-
-        if (this.speed < 1 || this.speed > 10) {
-            console.error('Неверные настройки, значение speed должно быть в диапазоне [1, 10].');
-            return false;
-        }
-
-        if (this.winLength < 5 || this.winLength > 50) {
-            console.error('Неверные настройки, значение winLength должно быть в диапазоне [5, 50].');
-            return false;
-        }
-
-        return true;
-    },
 };
 
 let game = {
