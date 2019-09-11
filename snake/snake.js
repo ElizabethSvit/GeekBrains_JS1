@@ -37,6 +37,21 @@ let snake = {
             case 'left' :
                 return {x: firstPoint.x - 1, y: firstPoint.y};
         }
+    },
+
+    isBodyPoint(point) {
+        return this.body.some(snakePoint => snakePoint.x === point.x && snakePoint.y === point.y);
+    },
+
+    setDirection(direction) {
+        this.direction = direction;
+    },
+
+    incrementBody() {
+        let lastBodyIdx = this.body.length - 1;
+        let lastBodyPoint = this.body[lastBodyIdx];
+        let lastBodyPointClone = Object.assign({}, lastBodyPoint);
+        this.body.push(lastBodyPointClone);
     }
 
 };
@@ -44,6 +59,7 @@ let snake = {
 let food = {
     x: null,
     y: null,
+    foodCounter: 0,
 
     setFoodCoordinates(point) {
         this.x = point.x;
@@ -55,6 +71,10 @@ let food = {
             x: this.x,
             y: this.y
         }
+    },
+
+    isFoodPoint(point) {
+        return this.x === point.x && this.y === point.y;
     }
 };
 
@@ -84,6 +104,7 @@ let renderer = {
         }
 
         snakePointArray.forEach((point, idx) => {
+            console.log(this.cells);
             this.cells[`x${point.x}_y${point.y}`].classList.add(idx === 0 ? 'snakeHead' : 'snakeBody');
         });
 
@@ -119,7 +140,7 @@ let settings = {
     rowsCount: 21,
     colsCount: 21,
     speed: 2,
-    winLength: 10,
+    winLength: 5,
 
     validate() {
         if (this.rowsCount < 10 || this.rowsCount > 30) {
@@ -186,15 +207,51 @@ let game = {
         this.reset();
     },
 
-    keyDownHandler() {
+    keyDownHandler(event) {
+        if(!this.status.isPlaying()) {
+            return;
+        }
 
+        let direction = this.getDirectionByCode(event.code);
+        if (this.canSetDirection(direction)) {
+            this.snake.setDirection(direction);
+        }
+    },
+
+    getDirectionByCode(code) {
+        switch (code) {
+            case 'KeyW':
+            case 'ArrowUp':
+                return 'up';
+            case 'KeyD':
+            case 'ArrowRight':
+                return 'right';
+            case 'KeyS':
+            case 'ArrowDown':
+                return 'down';
+            case 'KeyA':
+            case 'ArrowLeft':
+                return 'left';
+            default:
+                return '';
+        }
+    },
+
+    canSetDirection(direction) {
+        return direction === 'up' && this.snake.lastStepDirection !== 'down' ||
+            direction === 'right' && this.snake.lastStepDirection !== 'left' ||
+            direction === 'down' && this.snake.lastStepDirection !== 'up' ||
+            direction === 'left' && this.snake.lastStepDirection !== 'right';
     },
 
     reset() {
         this.snake.init(this.getStartSnakePoint(), 'up');
 
         this.food.setFoodCoordinates(this.getRandomCoordinates());
+        this.food.foodCounter = 0;
+        document.getElementById('foodCounter').innerHTML = '0';
 
+        this.changePlayButton("Старт");
         this.renderer.render(this.snake.body, this.food.getFoodCoordinates());
     },
 
@@ -207,22 +264,45 @@ let game = {
     },
 
     tickHandler() {
+        if (!this.canSnakeMakeStep()) {
+            this.finish();
+            return;
+        }
+
+        if(this.food.isFoodPoint(this.snake.getNextStepHeadPoint())) {
+            this.snake.incrementBody();
+            this.food.setFoodCoordinates(this.getRandomCoordinates());
+            this.food.foodCounter++;
+            document.getElementById('foodCounter').innerHTML = this.food.foodCounter.toString();
+            if(this.isGameWon()) {
+                this.finish()
+            }
+        }
+
         this.snake.makeStep();
         this.renderer.render(this.snake.body, this.food.getFoodCoordinates());
     },
 
-    stop() {
+    isGameWon() {
+        return this.snake.body.length > this.settings.winLength;
+    },
 
+    stop() {
+        this.status.setStopped();
+        clearInterval(this.tickInterval);
+        this.changePlayButton("Старт");
     },
 
     finish() {
-
+        this.status.setFinished();
+        clearInterval(this.tickInterval);
+        this.changePlayButton("Игра окончена", true);
     },
 
     getStartSnakePoint() {
         return {
             x: Math.floor(this.settings.colsCount / 2),
-            y: Math.floor(this.settings.rowsCount / 2),
+            y: Math.floor(this.settings.rowsCount / 2)
         }
     },
 
@@ -250,6 +330,16 @@ let game = {
         playButton.textContent = textContent;
         isDisabled ? playButton.classList.add('disabled') : playButton.classList.remove('disabled');
     },
+
+    canSnakeMakeStep() {
+        let nextHeadPoint = this.snake.getNextStepHeadPoint();
+
+        return !this.snake.isBodyPoint(nextHeadPoint) &&
+            nextHeadPoint.x < this.settings.colsCount &&
+            nextHeadPoint.y < this.settings.rowsCount &&
+            nextHeadPoint.x >= 0 &&
+            nextHeadPoint.y >= 0;
+    }
 };
 
 window.onload = function () {

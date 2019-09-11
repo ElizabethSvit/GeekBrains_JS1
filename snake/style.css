@@ -23,6 +23,11 @@
     justify-content: center;
 }
 
+#counter {
+    display: flex;
+    justify-content: center;
+}
+
 #game {
     border-collapse: collapse;
     margin: 2% auto 0;
@@ -40,18 +45,18 @@ td.cell {
 }
 
 .snakeBody {
-    background: #e5e5e5;
+    background: darkolivegreen;
 }
 
 .snakeHead {
-    background: #9b0013;
+    background: chocolate;
 }
 
 .disabled {
-    background: aliceblue;
+    background: burlywood;
 }
 
 .disabled:hover {
-    background: aliceblue;
+    background: burlywood;
 }
 
